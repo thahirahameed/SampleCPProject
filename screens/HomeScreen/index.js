@@ -1,42 +1,39 @@
 import {useState} from 'react';
 import {TouchableOpacity, View, Text, TextInput} from 'react-native';
 import Navigator from '../../navigation';
-import {useMyContext} from '../../contexts/MyContext';
-import {UserContextProvider} from '../../contexts/UserContext';
+import {useUserContext} from '../../contexts/UserContext';
 
 const HomeScreen = props => {
-  const [data, setData] = useState('Thahira');
-
-  const sendData = () => {
-    setData(data);
-  };
+  const [textInput, setTextInput] = useState('Thahira');
+  const {
+    state: {data},
+    actions: {setData},
+  } = useUserContext();
 
   return (
     <View style={{flex: 1, backgroundColor: 'pink', margin: 5}}>
       <TextInput
-        value={data}
+        value={textInput}
         onChangeText={changedText => {
-          setData(changedText);
+          setTextInput(changedText);
         }}
         style={{backgroundColor: 'pink', height: 40, margin: 5, padding: 5}}
       />
 
-      <UserContextProvider username={data}>
-        <View>
-          <Text>{`The data is ${data}!`}</Text>
-        </View>
+      <View>
+        <Text>{`The data is ${data}!`}</Text>
+      </View>
 
-        <View>
-          <TouchableOpacity
-            style={{backgroundColor: 'red', height: 40, margin: 10}}
-            onPress={() => {
-              sendData({data});
-              props.navigation.navigate('detailScreen');
-            }}>
-            <Text>Send to Details</Text>
-          </TouchableOpacity>
-        </View>
-      </UserContextProvider>
+      <View>
+        <TouchableOpacity
+          style={{backgroundColor: 'red', height: 40, margin: 10}}
+          onPress={() => {
+            setData(textInput);
+            props.navigation.navigate('detailScreen');
+          }}>
+          <Text>Send to Details</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
