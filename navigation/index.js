@@ -1,31 +1,63 @@
-import {} from 'react';
+import {useState, useEffect} from 'react';
 import {} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {DetailScreen, HomeScreen} from '../screens';
+import {DashboardScreen, LoginScreen} from '../screens';
+import {useUserContext} from '../contexts/UserContext';
 
 const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
+  const [isUserLoggedin, setIsUserLoggedin] = useState(false);
+
+  const {
+    state: {data},
+    actions: {setData},
+  } = useUserContext();
+
+  useEffect(() => {
+    fetchUserEmail();
+  }, [data]);
+
+  const fetchUserEmail = async () => {
+    //const userEmail = await PersistanceHelper.getValue('userEmail');
+
+    userEmail = data;
+    if (userEmail && userEmail.length > 0) {
+      setIsUserLoggedin(true);
+    } else {
+      setIsUserLoggedin(false);
+    }
+  };
+
   const screens = () => {
     return (
       <Stack.Group>
         <Stack.Screen
-          name="homeScreen"
-          component={HomeScreen}
-          options={{title: 'Home Screen'}}
+          name="dashboardScreen"
+          component={DashboardScreen}
+          options={{title: 'Dashboard Screen'}}
         />
+      </Stack.Group>
+    );
+  };
+
+  const loginStack = () => {
+    return (
+      <Stack.Group>
         <Stack.Screen
-          name="detailScreen"
-          component={DetailScreen}
-          options={{title: 'Detail Screen'}}
+          name="login"
+          component={LoginScreen}
+          options={{title: 'Login'}}
         />
       </Stack.Group>
     );
   };
 
   return (
-    <Stack.Navigator initialRouteName="homeScreen">{screens()}</Stack.Navigator>
+    <Stack.Navigator>
+      {isUserLoggedin ? screens() : loginStack()}
+    </Stack.Navigator>
   );
 };
 

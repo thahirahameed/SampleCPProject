@@ -1,4 +1,4 @@
-import DetailScreen from './DetailScreen';
-import HomeScreen from './HomeScreen';
+import LoginScreen from './LoginScreen';
+import DashboardScreen from './DashboardScreen/index';
 
-export {DetailScreen, HomeScreen};
+export {LoginScreen, DashboardScreen};
